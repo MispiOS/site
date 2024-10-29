@@ -1420,7 +1420,7 @@ class Parsedown
 
         if (preg_match('/^[(]\s*+((?:[^ ()]++|[(][^ )]+[)])++)(?:[ ]+("[^"]*+"|\'[^\']*+\'))?\s*+[)]/', $remainder, $matches))
         {
-            $Element['attributes']['href'] = $matches[1];
+            $Element['attributes']['href'] = (str_starts_with($matches[1], "./") ?  "?": "") . $matches[1];
 
             if (isset($matches[2]))
             {
