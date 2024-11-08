@@ -1,14 +1,15 @@
 <?php
-
 $explodedPath = explode("/", $_SERVER['SCRIPT_NAME']);
 $projectPart = $explodedPath[count($explodedPath) - 2];
 
 $githubLink = "https://raw.githubusercontent.com/MispiOS/documentation/refs/heads/main/" . $projectPart . "/";
 
-$explodedAskedPage = explode("?", $_SERVER["REQUEST_URI"]);
-$askedDocPage = (count($explodedAskedPage) == 2 ? $explodedAskedPage[1] : "home.md");
+$askedDocPage = substr($_SERVER["REQUEST_URI"], strlen($projectPart) + 2);
+if(str_ends_with($askedDocPage, "/")) {
+    $askedDocPage = substr($askedDocPage,0, strlen($askedDocPage) - 1);
+}
+$askedDocPage = (strlen($askedDocPage) == 0 ? "home.md" : $askedDocPage . (str_ends_with($askedDocPage, ".md") ? "" : ".md"));
 $askedDocPage = str_replace("\/.\/", "\/", $askedDocPage);
-
 $link = $githubLink . $askedDocPage;
 
 $content = file_get_contents($link);

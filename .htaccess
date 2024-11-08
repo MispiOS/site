@@ -1,0 +1,12 @@
+# Activation du module de réécriture
+RewriteEngine on
+
+RedirectMatch "^/base/(.*)\.md$" "/base/$1"
+RedirectMatch "^/base/home.$" "/base"
+RedirectMatch "^/base/home$" "/base"
+
+RewriteCond %{REQUEST_URI} ^/base/(.*)$
+RewriteCond %{REQUEST_URI} !^/base/(.*).md$
+RewriteCond %{REQUEST_URI} !^/base.$
+RewriteCond %{REQUEST_URI} !^/base/index.php$
+RewriteRule "^base/(.*)$" "/base/index.php"
