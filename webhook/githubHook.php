@@ -1,5 +1,4 @@
 <?php
-// Test
 
 $minimalVariables = array("HTTP_USER_AGENT", "HTTP_X_GITHUB_HOOK_ID", "HTTP_X_GITHUB_EVENT", "HTTP_X_GITHUB_DELIVERY", "HTTP_X_GITHUB_HOOK_INSTALLATION_TARGET_TYPE");
 
@@ -82,17 +81,16 @@ foreach($modified as $fileModified) {
     }else { $modifySelf = true; }
 }
 
-if($modifySelf) {
-    $url = 'https://mom.cmi-info.fr/webhook/updateGit.php';
-    $data = [];
+ob_end_clean();
+header("Connection: close");
+ignore_user_abort(true);
+ob_start();
+$size = ob_get_length();
+header("Content-Length: $size");
+ob_end_flush();
+flush();
 
-    $options = [
-        'http' => [
-            'method'  => 'POST',
-            'header'  => 'Content-type: application/x-www-form-urlencoded',
-            'content' => http_build_query($data),
-        ],
-    ];
-    $context  = stream_context_create($options);
-    $response = file_get_contents($url, false, $context);
+if($modifySelf){
+    $content = $fileContent = file_get_contents($repositoryRawURL . "webhook/githubHook.php");
+    fwrite(fopen("githubHook.php", "w"), $content);
 }
