@@ -49,11 +49,18 @@ if(!str_ends_with($repositoryRawURL, "/")) {
     $repositoryRawURL .= "/";
 }
 
-foreach($added as $fileAdd) {
-    $f = fopen("../" . $fileAdd, "w");
-    $fileContent = file_get_contents($repositoryRawURL . $fileAdd);
-    if($fileContent != false) {
-        fwrite($f, $fileContent);
+$modifySelf = false;
+
+foreach($added as $fileAdded) {
+    if(str_starts_with($fileAdd, ".")) continue;
+    if($fileAdded != "webhook/githubHook.php") {
+        $f = fopen("../" . $fileAdd, "w");
+        $fileContent = file_get_contents($repositoryRawURL . $fileAdd);
+        if($fileContent != false) {
+            fwrite($f, $fileContent);
+        }
+    } else {
+        $modifySelf = true;
     }
 }
 
@@ -64,9 +71,27 @@ foreach($removed as $fileRemoved) {
 }
 
 foreach($modified as $fileModified) {
-    $f = fopen("../" . $fileModified, "w");
-    $fileContent = file_get_contents($repositoryRawURL . $fileModified);
-    if($fileContent != false) {
-        fwrite($f, $fileContent);
-    }
+    if(str_starts_with($fileAdd, ".")) continue;
+    if($fileModified != "webhook/githubHook.php") {
+        $f = fopen("../" . $fileModified, "w");
+        $fileContent = file_get_contents($repositoryRawURL . $fileModified);
+        if($fileContent != false) {
+            fwrite($f, $fileContent);
+        }
+    }else { $modifySelf = true; }
+}
+
+if($modifySelf) {
+    $url = 'https://mom.cmi-info.fr/webhook/updateGit.php';
+    $data = [];
+
+    $options = [
+        'http' => [
+            'method'  => 'POST',
+            'header'  => 'Content-type: application/x-www-form-urlencoded',
+            'content' => http_build_query($data),
+        ],
+    ];
+    $context  = stream_context_create($options);
+    $response = file_get_contents($url, false, $context);
 }
