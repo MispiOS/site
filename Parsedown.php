@@ -1420,7 +1420,7 @@ class Parsedown
 
         if (preg_match('/^[(]\s*+((?:[^ ()]++|[(][^ )]+[)])++)(?:[ ]+("[^"]*+"|\'[^\']*+\'))?\s*+[)]/', $remainder, $matches))
         {
-            $Element['attributes']['href'] = substr($matches[1], 0, strlen($matches[1])-3);
+            $Element['attributes']['href'] = (str_ends_with($matches[1], ".md") ? substr($matches[1], 0, strlen($matches[1])-3) : $matches[1]);
 
             if (isset($matches[2]))
             {
