@@ -10,3 +10,6 @@ RewriteCond %{REQUEST_URI} !^/base/(.*).md$
 RewriteCond %{REQUEST_URI} !^/base.$
 RewriteCond %{REQUEST_URI} !^/base/index.php$
 RewriteRule "^base/(.*)$" "/base/index.php"
+
+RewriteCond %{REQUEST_URI} !^/webhook/(.*).php
+RewriteRule "^webhook/(.*)$" "/webhook/$1Hook.php"
