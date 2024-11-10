@@ -20,6 +20,15 @@ $content = file_get_contents("php://input");
 
 if($content == false) die;
 
+ob_end_clean();
+header("Connection: close");
+ignore_user_abort(true);
+ob_start();
+$size = ob_get_length();
+header("Content-Length: $size");
+ob_end_flush();
+flush();
+
 $json = json_decode($content, true);
 
 if($json == null) die;
@@ -59,13 +68,11 @@ foreach($added as $fileAdded) {
         if($fileContent != false) {
             fwrite($f, $fileContent);
         }
-    } else {
-        $modifySelf = true;
-    }
+    } else { $modifySelf = true; }
 }
 
 foreach($removed as $fileRemoved) {
-    if(file_exists($fileRemoved)) {
+    if(file_exists("../" . $fileRemoved)) {
         unlink("../" . $fileRemoved);
     }
 }
@@ -80,15 +87,6 @@ foreach($modified as $fileModified) {
         }
     }else { $modifySelf = true; }
 }
-
-ob_end_clean();
-header("Connection: close");
-ignore_user_abort(true);
-ob_start();
-$size = ob_get_length();
-header("Content-Length: $size");
-ob_end_flush();
-flush();
 
 if($modifySelf){
     $content = $fileContent = file_get_contents($repositoryRawURL . "webhook/githubHook.php");
