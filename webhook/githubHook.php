@@ -36,27 +36,33 @@ if($json == null) die;
 $ref = $json["ref"];
 if($ref != "refs/heads/main") die;
 
-$commits = $json["commits"];
+$commit = $json["head_commit"];
 
-$timestamp = strtotime($commits[0]["timestamp"]);
-$mostRecentCommit = $commits[0];
+$added = [];
+$removed = [];
+$modified = [];
 
-foreach($commits as $commit) {
-    $commitTimestamp = strtotime($commit["timestamp"]);
-    if($commitTimestamp > $timestamp) {
-        $timestamp = $commitTimestamp;
-        $mostRecentCommit = $commit;
+foreach($json["commits"] as $commit) {
+    foreach($commit["added"] as $addedFile) {
+        if(!in_array($addedFile, $added)) {
+            array_push($added, $addedFile);
+        }
+    }
+
+    foreach($commit["removed"] as $removedFile) {
+        if(!in_array($removedFile, $removed)) {
+            array_push($removed, $removedFile);
+        }
+    }
+
+    foreach($commit["modified"] as $modifiedFile) {
+        if(!in_array($modifiedFile, $modified)) {
+            array_push($modified, $modifiedFile);
+        }
     }
 }
 
-$added = $mostRecentCommit["added"];
-$removed = $mostRecentCommit["removed"];
-$modified = $mostRecentCommit["modified"];
-
-$repositoryRawURL = "https://raw.githubusercontent.com/MispiOS/site/refs/heads/main/";
-if(!str_ends_with($repositoryRawURL, "/")) {
-    $repositoryRawURL .= "/";
-}
+$repositoryRawURL = "https://raw.githubusercontent.com/MispiOS/site/" . $json["after"] . "/";
 
 $modifySelf = false;
 
