@@ -39,10 +39,10 @@ $nomFichier = "docs.zip";
 
 $downloadURL = str_replace("/tag/", "/downloads/", $json["release"]["html_url"]) . "/" . $nomFichier;
 
-file_put_contents($nomFichier, file_get_contents($downloadURL));
+file_put_contents("./" . $nomFichier, file_get_contents($downloadURL));
 
 $zip = new ZipArchive;
-$zip->open($nomFichier);
+$zip->open("./" . $nomFichier);
 $zip->extractTo("../docs", );
 $zip->close();
 
