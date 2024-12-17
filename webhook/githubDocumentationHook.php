@@ -43,10 +43,10 @@ file_put_contents("./" . $nomFichier, file_get_contents($downloadURL));
 
 $zip = new ZipArchive;
 $zip->open("./" . $nomFichier);
-$zip->extractTo("../docs", );
+$zip->extractTo("../docs/", );
 $zip->close();
 
-unlink($nomFichier);
+unlink("./" . $nomFichier);
 
 // télécharger le ZIP (github.com/.../.../releases/latest/TRUC.zip)
 // extraire le ZIP
