@@ -37,7 +37,7 @@ if($json["action"] != "created") die;
 
 $nomFichier = "docs.zip";
 
-$downloadURL = "https://github.com/MispiOS/documentation/releases/download/" . $json["tag_name"] . "/" . $nomFichier;
+$downloadURL = "https://github.com/MispiOS/documentation/releases/download/" . $json["release"]["tag_name"] . "/" . $nomFichier;
 
 file_put_contents("./" . $nomFichier, file_get_contents($downloadURL));
 
