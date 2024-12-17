@@ -37,7 +37,7 @@ if($json["action"] != "created") die;
 
 $nomFichier = "docs.zip";
 
-$downloadURL = str_replace("/tag/", "/downloads/", $json["release"]["html_url"]) . "/" . $nomFichier;
+$downloadURL = "https://github.com/MispiOS/documentation/releases/download/" . $json["tag_name"] . "/" . $nomFichier;
 
 file_put_contents("./" . $nomFichier, file_get_contents($downloadURL));
 
@@ -46,7 +46,7 @@ $zip->open("./" . $nomFichier);
 $zip->extractTo("../docs/", );
 $zip->close();
 
-unlink("./" . $nomFichier);
+//unlink("./" . $nomFichier);
 
 // télécharger le ZIP (github.com/.../.../releases/latest/TRUC.zip)
 // extraire le ZIP
