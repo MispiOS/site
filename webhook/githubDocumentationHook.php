@@ -33,7 +33,7 @@ $json = json_decode($content, true);
 
 if($json == null) die;
 
-if($json["action"] != "created") die;
+if($json["action"] != "published") die;
 
 $nomFichier = "docs.zip";
 
